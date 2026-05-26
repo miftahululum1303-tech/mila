@@ -9,7 +9,8 @@
         Hari ini: <strong class="text-dark"><?php echo date('d F Y'); ?></strong>
     </div>
     <div>
-        Developed by <span class="fw-bold" style="color: var(--primary-color);">Nama Anda</span> &copy; <?php echo date('Y'); ?>
+        Developed by <span class="fw-bold" style="color: var(--primary-color);">Novia Dwi Urmila</span> &copy;
+        <?php echo date('Y'); ?>
     </div>
 </footer>
 
@@ -98,6 +99,21 @@
             });
         }
     });
+</script>
+
+<script>
+    setTimeout(function() {
+
+        let alert = document.querySelector('.alert');
+
+        if (alert) {
+
+            let bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+
+        }
+
+    }, 3000);
 </script>
 </body>
 

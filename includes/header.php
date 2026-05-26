@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory System - PROLI</title>
-    
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" rel="stylesheet">
-    
+
     <style>
         :root {
             --primary-color: #3e7ccb;
@@ -229,7 +229,7 @@
                 <i class="fa-solid fa-bars fa-lg"></i>
             </button>
         </div>
-        
+
         <button class="btn btn-link text-dark ps-3 d-md-none" id="sidebarToggleMobile">
             <i class="fa-solid fa-bars fa-lg"></i>
         </button>
@@ -238,12 +238,17 @@
             <div class="dropdown">
                 <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=100&auto=format&fit=crop" class="rounded-circle me-2" width="32" height="32" alt="User Profile" style="object-fit: cover;">
-                    <span class="d-none d-sm-inline text-dark fw-semibold small">Admin Inventory</span>
+                    <span class="d-none d-sm-inline text-dark fw-semibold small"><?= $_SESSION['nama_lengkap']; ?></span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm mt-2" aria-labelledby="userMenu">
                     <li><a class="dropdown-menu-item dropdown-item py-2" href="index.php?page=profil"><i class="fa-solid fa-user me-2 text-muted"></i> Profil Saya</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-menu-item dropdown-item py-2 text-danger" href="#"><i class="fa-solid fa-right-from-bracket me-2"></i> Keluar</a></li>
+                    <li>
+                        <a class="dropdown-menu-item dropdown-item py-2 text-danger" href="auth/logout.php">
+                            <i class="fa-solid fa-right-from-bracket me-2"></i>
+                            Keluar
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

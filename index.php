@@ -1,4 +1,13 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['login'])) {
+    header('Location:auth/login.php');
+    exit();
+}
+
+include 'config/koneksi.php';
+
 // Memuat berkas konfigurasi database utama
 require_once 'config/koneksi.php';
 
@@ -13,34 +22,36 @@ include_once 'includes/sidebar.php';
 $page = isset($_GET['page']) ? $_GET['page'] : '';
 
 switch ($page) {
-    case 'profil':
-        include 'pages/profil.php';
-        break;
-    // Master Data
-    case 'barang':
-    case 'supplier':
-    case 'safety-stock':
-        include 'pages/master.php';
-        break;
-    // Transaksi
-    case 'barang-masuk':
-    case 'barang-keluar':
-    case 'retur-log':
-        include 'pages/transaksi.php';
-        break;
-    // Laporan
-    case 'stok-opname':
-    case 'mutasi-stok':
-    case 'peramalan':
-        include 'pages/laporan.php';
-        break;
-    // Pengaturan
-    case 'user':
-        include 'pages/master.php'; // Atau buat file khusus user.php jika terpisah
-        break;
-    default:
-        include 'pages/profil.php';
-        break;
+case 'dashboard':
+include 'pages/dashboard.php';
+break;
+// Data Barang
+case 'barang':
+include 'pages/barang.php';
+break;
+// Supplier
+case 'supplier':
+include 'pages/supplier.php';
+break;
+// Barang Masuk
+case 'barang-masuk':
+include 'pages/barang_masuk.php';
+break;
+// Barang Keluar
+case 'barang-keluar':
+include 'pages/barang_keluar.php';
+break;
+// Laporan
+case 'laporan':
+include 'pages/laporan.php';
+break;
+// User Management
+case 'user':
+include 'pages/user.php';
+break;
+default:
+include 'pages/dashboard.php';
+break;
 }
 
 // Memuat komponen layout bawah (Footer Script, JS Engine)
