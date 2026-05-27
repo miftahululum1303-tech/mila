@@ -244,12 +244,17 @@ if (isset($_GET['hapus_kategori'])) {
 ?>
 
 <div class="container-fluid p-0">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
         <div>
-            <h4 class="fw-bold m-0">Data Barang</h4>
-            <small class="text-muted">
-                Data barang.
-            </small>
+            <div>
+                <h4 class="fw-bold text-dark mb-1">
+                    Inventory Barang
+                </h4>
+
+                <small class="text-muted">
+                    Kelola data barang dan kategori inventory.
+                </small>
+            </div>
         </div>
     </div>
 
@@ -257,7 +262,7 @@ if (isset($_GET['hapus_kategori'])) {
 
     <div class="card mb-4">
         <div class="card-header bg-white border-0 p-0">
-            <ul class="nav nav-tabs nav-justified border-bottom" id="masterTab" role="tablist">
+            <ul class="nav custom-tabs mb-4" id="masterTab" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active py-3 fw-semibold text-secondary" id="barang-tab" data-bs-toggle="tab"
                         data-bs-target="#barang-pane" type="button" role="tab" aria-controls="barang-pane"
@@ -300,6 +305,24 @@ if (isset($_GET['hapus_kategori'])) {
                         </tr>
                     </thead>
                     <tbody>
+                        <?php if (mysqli_num_rows($r_barang) == 0) : ?>
+
+                        <tr>
+
+                            <td colspan="6" class="text-center py-5">
+
+                                <img src="https://cdn-icons-png.flaticon.com/512/7486/7486740.png" width="120"
+                                    class="mb-3 opacity-75">
+
+                                <h6 class="fw-bold text-muted">
+                                    Belum ada data barang
+                                </h6>
+
+                            </td>
+
+                        </tr>
+
+                        <?php endif; ?>
                         <?php $data_barang = [];
 
                         while ($b = mysqli_fetch_assoc($r_barang)) {
@@ -313,10 +336,12 @@ if (isset($_GET['hapus_kategori'])) {
                             <td><?php echo htmlspecialchars($b['satuan']); ?></td>
                             <td class="text-center">
                                 <div class="btn-group btn-group-sm">
-                                    <button class="btn btn-outline-secondary" data-bs-toggle="modal"
-                                        data-bs-target="#editBarang<?php echo $b['id_barang']; ?>">
+                                    <a href="index.php?page=edit-barang&id=<?php echo $b['id_barang']; ?>"
+                                        class="btn btn-outline-secondary">
+
                                         <i class="fa-solid fa-pen"></i>
-                                    </button>
+
+                                    </a>
                                     <a href="index.php?page=barang&hapus_barang=<?php echo $b['id_barang']; ?>"
                                         class="btn btn-outline-danger"
                                         onclick="return confirm('Yakin ingin menghapus data?')">
@@ -328,110 +353,9 @@ if (isset($_GET['hapus_kategori'])) {
                         <?php } ?>
                     </tbody>
                 </table>
-                <?php foreach ($data_barang as $b): ?>
-                <div class="modal fade" id="editBarang<?php echo $b['id_barang']; ?>" tabindex="-1" aria-hidden="true">
-
-                    <div class="modal-dialog">
-
-                        <form action="" method="POST" class="modal-content">
-
-                            <input type="hidden" name="aksi" value="edit_barang">
-
-                            <input type="hidden" name="id_barang" value="<?php echo $b['id_barang']; ?>">
-
-                            <div class="modal-header">
-
-                                <h5 class="modal-title">
-                                    Edit Barang
-                                </h5>
-
-                                <button type="button" class="btn-close" data-bs-dismiss="modal">
-                                </button>
-
-                            </div>
-
-                            <div class="modal-body">
-
-                                <div class="mb-3">
-                                    <label class="form-label">
-                                        Kode Barang
-                                    </label>
-
-                                    <input type="text" name="kode_barang" class="form-control"
-                                        value="<?php echo $b['kode_barang']; ?>" readonly>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">
-                                        Nama Barang
-                                    </label>
-
-                                    <input type="text" name="nama_barang" class="form-control"
-                                        value="<?php echo $b['nama_barang']; ?>" required>
-                                </div>
-
-                                <div class="mb-3">
-
-                                    <label class="form-label">
-                                        Kategori
-                                    </label>
-
-                                    <select name="id_kategori" class="form-select" required>
-
-                                        <?php foreach ($kategori_list as $kat): ?>
-
-                                        <option value="<?php echo $kat['id_kategori']; ?>" <?php echo $kat['id_kategori'] == $b['id_kategori'] ? 'selected' : ''; ?>>
-
-                                            <?php echo $kat['nama_kategori']; ?>
-
-                                        </option>
-
-                                        <?php endforeach; ?>
-
-                                    </select>
-
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">
-                                        Satuan
-                                    </label>
-
-                                    <input type="text" name="satuan" class="form-control"
-                                        value="<?php echo $b['satuan']; ?>" required>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">
-                                        Harga Beli
-                                    </label>
-
-                                    <input type="number" name="harga_beli" class="form-control"
-                                        value="<?php echo $b['harga_beli']; ?>" required>
-                                </div>
-
-                            </div>
-
-                            <div class="modal-footer">
-
-                                <button type="submit" class="btn btn-primary">
-
-                                    Update
-
-                                </button>
-
-                            </div>
-
-                        </form>
-
-                    </div>
-
-                </div>
-                <?php endforeach; ?>
             </div>
 
-            <div class="tab-pane fade" id="kategori-pane" role="tabpanel" aria-labelledby="kategori-tab"
-                tabindex="0">
+            <div class="tab-pane fade" id="kategori-pane" role="tabpanel" aria-labelledby="kategori-tab" tabindex="0">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="fw-bold text-dark m-0">Data Kategori</h5>
                     <button class="btn btn-warning btn-sm text-dark shadow-sm px-3 fw-semibold" data-bs-toggle="modal"
@@ -471,12 +395,12 @@ if (isset($_GET['hapus_kategori'])) {
 
                                 <div class="btn-group btn-group-sm">
 
-                                    <button class="btn btn-outline-secondary" data-bs-toggle="modal"
-                                        data-bs-target="#editKategori<?php echo $kat['id_kategori']; ?>">
+                                    <a href="index.php?page=edit-kategori&id=<?php echo $kat['id_kategori']; ?>"
+                                        class="btn btn-outline-secondary">
 
                                         <i class="fa-solid fa-pen"></i>
 
-                                    </button>
+                                    </a>
 
                                     <a href="index.php?page=barang&hapus_kategori=<?php echo $kat['id_kategori']; ?>"
                                         class="btn btn-outline-danger"
@@ -493,70 +417,6 @@ if (isset($_GET['hapus_kategori'])) {
                         <?php } ?>
                     </tbody>
                 </table>
-                <?php foreach ($data_kategori as $kat): ?>
-                <!-- MODAL EDIT KATEGORI -->
-                <div class="modal fade" id="editKategori<?php echo $kat['id_kategori']; ?>" tabindex="-1">
-
-                    <div class="modal-dialog">
-
-                        <form action="" method="POST" class="modal-content">
-
-                            <input type="hidden" name="aksi" value="edit_kategori">
-
-                            <input type="hidden" name="id_kategori" value="<?php echo $kat['id_kategori']; ?>">
-
-                            <div class="modal-header">
-
-                                <h5 class="modal-title">
-                                    Edit Kategori
-                                </h5>
-
-                                <button type="button" class="btn-close" data-bs-dismiss="modal">
-                                </button>
-
-                            </div>
-
-                            <div class="modal-body">
-
-                                <div class="mb-3">
-
-                                    <label class="form-label">
-                                        Nama Kategori
-                                    </label>
-
-                                    <input type="text" name="nama_kategori" class="form-control"
-                                        value="<?php echo $kat['nama_kategori']; ?>" required>
-
-                                </div>
-
-                                <div class="mb-3">
-
-                                    <label class="form-label">
-                                        Deskripsi
-                                    </label>
-
-                                    <textarea name="deskripsi" class="form-control" rows="3"><?php echo $kat['deskripsi']; ?></textarea>
-
-                                </div>
-
-                            </div>
-
-                            <div class="modal-footer">
-
-                                <button type="submit" class="btn btn-primary">
-
-                                    Update
-
-                                </button>
-
-                            </div>
-
-                        </form>
-
-                    </div>
-
-                </div>
-                <?php endforeach; ?>
             </div>
 
         </div>
@@ -646,28 +506,244 @@ if (isset($_GET['hapus_kategori'])) {
 </div>
 
 <script>
-    window.addEventListener('DOMContentLoaded', function() {
-        $(document).ready(function() {
-            if ($.fn.DataTable.isDataTable('#tableBarang')) {
-                $('#tableBarang').DataTable().destroy();
-            }
-            $('#tableBarang').DataTable({
-                pageLength: 10,
-                language: {
-                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json'
-                }
-            });
+    $(function() {
 
-            if ($.fn.DataTable.isDataTable('#tableKategori')) {
-                $('#tableKategori').DataTable().destroy();
+        $('#tableBarang').DataTable({
+
+            responsive: true,
+
+            pageLength: 10,
+
+            language: {
+
+                url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json'
+
             }
-            $('#tableKategori').DataTable({
-                responsive: true,
-                pageLength: 5,
-                language: {
-                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json'
-                }
-            });
+
         });
+
+        $('#tableKategori').DataTable({
+
+            responsive: true,
+
+            pageLength: 5,
+
+            language: {
+
+                url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json'
+
+            }
+
+        });
+
     });
 </script>
+
+<style>
+    .custom-tabs {
+
+        background: #fdf2f8;
+
+        padding: 8px;
+
+        border-radius: 18px;
+
+        gap: 10px;
+
+    }
+
+    .custom-tabs .nav-link {
+
+        border: none !important;
+
+        border-radius: 14px !important;
+
+        color: #6b7280 !important;
+
+        font-weight: 600;
+
+        transition: .3s;
+
+        padding: 12px 20px;
+
+    }
+
+    .custom-tabs .nav-link.active {
+
+        background:
+            linear-gradient(135deg,
+                #ec4899,
+                #d946ef) !important;
+
+        color: white !important;
+
+        box-shadow:
+            0 10px 20px rgba(236, 72, 153, .2);
+
+    }
+
+    .table {
+
+        border-collapse: separate;
+
+        border-spacing: 0 10px;
+
+    }
+
+    .table thead th {
+
+        border: none !important;
+
+        background: transparent !important;
+
+        color: #6b7280;
+
+        font-size: 14px;
+
+        font-weight: 600;
+
+    }
+
+    .table tbody tr {
+
+        background: #fff;
+
+        box-shadow:
+            0 4px 15px rgba(0, 0, 0, .03);
+
+        transition: .3s;
+
+    }
+
+    .table tbody tr:hover {
+
+        background: #fcfcfc;
+
+    }
+
+    .table tbody td {
+
+        vertical-align: middle;
+
+        border-top: none;
+
+        border-bottom: none;
+
+        padding: 16px 14px;
+
+    }
+
+    .table tbody td:first-child {
+
+        border-radius: 16px 0 0 16px;
+
+    }
+
+    .table tbody td:last-child {
+
+        border-radius: 0 16px 16px 0;
+
+    }
+
+    .modal-content {
+
+        border: none;
+
+        border-radius: 28px;
+
+        background: #fff;
+
+        box-shadow:
+            0 15px 40px rgba(236, 72, 153, .12);
+
+    }
+
+    .modal-header {
+
+        border-bottom: 1px solid #fce7f3;
+
+        padding: 20px 24px;
+
+    }
+
+    .modal-footer {
+
+        border-top: 1px solid #fce7f3;
+
+    }
+
+    .form-control,
+    .form-select {
+
+        border-radius: 14px;
+
+        border: 1px solid #f3e8ff;
+
+        padding: 10px 14px;
+
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+
+        border-color: #ec4899;
+
+        box-shadow:
+            0 0 0 .15rem rgba(236, 72, 153, .15);
+
+    }
+
+    .btn-primary {
+
+        background:
+            linear-gradient(135deg,
+                #ec4899,
+                #d946ef);
+
+        border: none;
+
+        border-radius: 14px;
+
+    }
+
+    .btn-warning {
+
+        border-radius: 14px;
+
+    }
+
+    .btn-outline-secondary,
+    .btn-outline-danger {
+
+        border-radius: 12px;
+
+    }
+
+    .badge {
+
+        padding: 8px 12px;
+
+        border-radius: 10px;
+
+        font-weight: 500;
+
+    }
+
+    .dataTables_wrapper .dataTables_filter input {
+
+        border-radius: 12px;
+
+        border: 1px solid #f3e8ff;
+
+        padding: 6px 12px;
+
+    }
+
+    .dataTables_wrapper .dataTables_length select {
+
+        border-radius: 12px;
+
+        border: 1px solid #f3e8ff;
+
+    }
+</style>

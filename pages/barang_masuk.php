@@ -257,33 +257,35 @@ $kode_masuk_otomatis = 'TRM-' . str_pad($nomor_masuk, 3, '0', STR_PAD_LEFT);
 ?>
 
 <div class="container-fluid p-0">
-
-    <div class="mb-4">
-        <h4 class="fw-bold m-0" style="color: var(--dark-color);">
-            <?php
-            if ($sub_page == 'barang-masuk') {
-                echo '<i class="fa-solid fa-arrow-down-long text-success me-2"></i>Data Barang Masuk';
-            } elseif ($sub_page == 'barang-keluar') {
-                echo '<i class="fa-solid fa-arrow-up-long text-danger me-2"></i>Data Barang Keluar';
-            }
-            ?>
-        </h4>
-        <small class="text-muted">Data transaksi barang.</small>
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <h4 class="fw-bold text-dark mb-1">
+                <?php
+                if ($sub_page == 'barang-masuk') {
+                    echo '<i class="fa-solid fa-arrow-down-long text-success me-2"></i>Data Barang Masuk';
+                } elseif ($sub_page == 'barang-keluar') {
+                    echo '<i class="fa-solid fa-arrow-up-long text-danger me-2"></i>Data Barang Keluar';
+                }
+                ?>
+            </h4>
+            <small class="text-muted">
+                Kelola transaksi barang masuk dan keluar inventory.
+            </small>
+        </div>
     </div>
 
     <?php echo $notif; ?>
 
-    <div class="card p-4">
-
+    <div class="card transaksi-card p-4">
         <?php if ($sub_page == 'barang-masuk'): ?>
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="fw-bold text-dark m-0">Daftar Barang Masuk</h5>
-            <button class="btn btn-success btn-sm shadow-sm px-3" data-bs-toggle="modal" data-bs-target="#modalMasuk">
+            <button class="btn btn-success px-4 py-2 shadow-sm transaksi-btn" data-bs-toggle="modal"
+                data-bs-target="#modalMasuk">
                 <i class="fa-solid fa-plus me-2"></i>Catat Barang Masuk
             </button>
         </div>
-
-        <table id="tableMasuk" class="table table-striped table-hover nowrap dt-responsive w-100">
+        <table id="tableMasuk" class="table align-middle table-hover nowrap dt-responsive w-100 transaksi-table">
             <thead class="table-light">
                 <tr>
                     <th>No</th>
@@ -306,7 +308,9 @@ $kode_masuk_otomatis = 'TRM-' . str_pad($nomor_masuk, 3, '0', STR_PAD_LEFT);
                     while ($m = mysqli_fetch_assoc($r_masuk)):
                     ?>
                 <tr>
-                    <td class="fw-bold text-success"><?php echo htmlspecialchars($m['no_faktur']); ?></td>
+                    <td>
+                        <span class="badge-soft-success"><?php echo htmlspecialchars($m['no_faktur']); ?></span>
+                    </td>
                     <td> <?php echo htmlspecialchars($m['nama_barang']); ?></td>
                     <td><?php echo htmlspecialchars($m['nama_supplier'] ?? 'Umum/Tanpa Supplier'); ?></td>
                     <td class="fw-bold"><?php echo $m['jumlah']; ?></td>
@@ -326,12 +330,12 @@ $kode_masuk_otomatis = 'TRM-' . str_pad($nomor_masuk, 3, '0', STR_PAD_LEFT);
         <?php elseif ($sub_page == 'barang-keluar'): ?>
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="fw-bold text-dark m-0">Daftar Barang Keluar</h5>
-            <button class="btn btn-danger btn-sm shadow-sm px-3" data-bs-toggle="modal" data-bs-target="#modalKeluar">
+            <button class="btn btn-danger px-4 py-2 shadow-sm transaksi-btn" data-bs-toggle="modal"
+                data-bs-target="#modalKeluar">
                 <i class="fa-solid fa-minus me-2"></i>Catat Barang Keluar
             </button>
         </div>
-
-        <table id="tableKeluar" class="table table-striped table-hover nowrap dt-responsive w-100">
+        <table id="tableKeluar" class="table align-middle table-hover nowrap dt-responsive w-100 transaksi-table">
             <thead class="table-light">
                 <tr>
                     <th>No. Nota</th>
@@ -354,7 +358,9 @@ $kode_masuk_otomatis = 'TRM-' . str_pad($nomor_masuk, 3, '0', STR_PAD_LEFT);
                     while ($k = mysqli_fetch_assoc($r_keluar)):
                     ?>
                 <tr>
-                    <td class="fw-bold text-danger"><?php echo htmlspecialchars($k['no_nota']); ?></td>
+                    <td>
+                        <span class="badge-soft-danger"><?php echo htmlspecialchars($k['no_nota']); ?></span>
+                    </td>
                     <td>[<?php echo htmlspecialchars($k['kode_barang']); ?>] <?php echo htmlspecialchars($k['nama_barang']); ?></td>
                     <td class="fw-bold text-danger"><?php echo $k['jumlah']; ?></td>
                     <td><?php echo date('d/m/Y H:i', strtotime($k['tanggal_keluar'])); ?></td>
@@ -396,7 +402,8 @@ $kode_masuk_otomatis = 'TRM-' . str_pad($nomor_masuk, 3, '0', STR_PAD_LEFT);
                     <select class="form-select form-select-sm" name="id_barang" required>
                         <option value="">-- Pilih Barang --</option>
                         <?php foreach ($barang_list as $b): ?>
-                        <option value="<?php echo $b['id_barang']; ?>"><?php echo htmlspecialchars($b['nama_barang']); ?> (Stok: <?php echo $b['stok_sekarang']; ?>)</option>
+                        <option value="<?php echo $b['id_barang']; ?>"><?php echo htmlspecialchars($b['nama_barang']); ?> (Stok: <?php echo $b['stok_sekarang']; ?>)
+                        </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -527,3 +534,191 @@ $kode_masuk_otomatis = 'TRM-' . str_pad($nomor_masuk, 3, '0', STR_PAD_LEFT);
         });
     });
 </script>
+
+<style>
+    .transaksi-card {
+
+        border-radius: 30px;
+
+        background: rgba(255, 255, 255, .78);
+
+        backdrop-filter: blur(16px);
+
+        box-shadow:
+            0 10px 35px rgba(236, 72, 153, .08);
+
+    }
+
+    .transaksi-btn {
+
+        border: none;
+
+        border-radius: 16px;
+
+        font-weight: 500;
+
+    }
+
+    .table {
+
+        border-collapse: separate;
+
+        border-spacing: 0 10px;
+
+    }
+
+    .table thead th {
+
+        border: none !important;
+
+        background: transparent !important;
+
+        color: #6b7280;
+
+        font-size: 14px;
+
+        font-weight: 600;
+
+    }
+
+    .table tbody tr {
+
+        background: rgba(255, 255, 255, .85);
+
+        backdrop-filter: blur(10px);
+
+        transition: .3s;
+
+        box-shadow:
+            0 4px 15px rgba(0, 0, 0, .03);
+
+    }
+
+    .table tbody tr:hover {
+
+        transform: translateY(-2px);
+
+    }
+
+    .table tbody td {
+
+        border: none;
+
+        vertical-align: middle;
+
+        padding: 16px 14px;
+
+    }
+
+    .table tbody td:first-child {
+
+        border-radius: 18px 0 0 18px;
+
+    }
+
+    .table tbody td:last-child {
+
+        border-radius: 0 18px 18px 0;
+
+    }
+
+    .badge-soft-success {
+
+        background: #dcfce7;
+
+        color: #166534;
+
+        padding: 8px 14px;
+
+        border-radius: 12px;
+
+        font-weight: 600;
+
+    }
+
+    .badge-soft-danger {
+
+        background: #fee2e2;
+
+        color: #991b1b;
+
+        padding: 8px 14px;
+
+        border-radius: 12px;
+
+        font-weight: 600;
+
+    }
+
+    .modal-content {
+
+        border: none;
+
+        border-radius: 30px;
+
+        overflow: hidden;
+
+        background: rgba(255, 255, 255, .96);
+
+        backdrop-filter: blur(16px);
+
+        box-shadow:
+            0 20px 45px rgba(236, 72, 153, .15);
+
+    }
+
+    .modal-header {
+
+        border-bottom: 1px solid #fce7f3;
+
+        padding: 22px 26px;
+
+    }
+
+    .modal-footer {
+
+        border-top: 1px solid #fce7f3;
+
+        padding: 18px 26px;
+
+    }
+
+    .form-control,
+    .form-select {
+
+        border-radius: 14px;
+
+        border: 1px solid #f3e8ff;
+
+        padding: 10px 14px;
+
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+
+        border-color: #ec4899;
+
+        box-shadow:
+            0 0 0 .15rem rgba(236, 72, 153, .15);
+
+    }
+
+    .dataTables_wrapper .dataTables_filter input {
+
+        border-radius: 12px;
+
+        border: 1px solid #f3e8ff;
+
+        padding: 6px 12px;
+
+    }
+
+    .dataTables_wrapper .dataTables_length select {
+
+        border-radius: 12px;
+
+        border: 1px solid #f3e8ff;
+
+    }
+</style>

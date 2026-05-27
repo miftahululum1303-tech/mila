@@ -22,36 +22,48 @@ include_once 'includes/sidebar.php';
 $page = isset($_GET['page']) ? $_GET['page'] : '';
 
 switch ($page) {
-case 'dashboard':
-include 'pages/dashboard.php';
-break;
-// Data Barang
-case 'barang':
-include 'pages/barang.php';
-break;
-// Supplier
-case 'supplier':
-include 'pages/supplier.php';
-break;
-// Barang Masuk
-case 'barang-masuk':
-include 'pages/barang_masuk.php';
-break;
-// Barang Keluar
-case 'barang-keluar':
-include 'pages/barang_keluar.php';
-break;
-// Laporan
-case 'laporan':
-include 'pages/laporan.php';
-break;
-// User Management
-case 'user':
-include 'pages/user.php';
-break;
-default:
-include 'pages/dashboard.php';
-break;
+    case 'dashboard':
+        include 'pages/dashboard.php';
+        break;
+    // Data Barang
+    case 'barang':
+        include 'pages/barang.php';
+        break;
+    // Edit Barang
+    case 'edit-barang':
+        include 'pages/edit_barang.php';
+        break;
+    // Edit Kategori
+    case 'edit-kategori':
+        include 'pages/edit_kategori.php';
+        break;
+    // Supplier
+    case 'supplier':
+        include 'pages/supplier.php';
+        break;
+    // Barang Masuk
+    case 'barang-masuk':
+        include 'pages/barang_masuk.php';
+        break;
+    // Barang Keluar
+    case 'barang-keluar':
+        include 'pages/barang_keluar.php';
+        break;
+    // Laporan
+    case 'laporan':
+        include 'pages/laporan.php';
+        break;
+    // User Management
+    case 'user':
+        include 'pages/user.php';
+        break;
+    // Profil
+    case 'profil':
+        include 'pages/profil.php';
+        break;
+    default:
+        include 'pages/dashboard.php';
+        break;
 }
 
 // Memuat komponen layout bawah (Footer Script, JS Engine)

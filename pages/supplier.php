@@ -136,36 +136,30 @@ $result = mysqli_query($koneksi, $query);
 
 <div class="container-fluid p-0">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
 
         <div>
-
-            <h4 class="fw-bold m-0">
-                Data Supplier
+            <h4 class="fw-bold text-dark mb-1">
+                Supplier Management
             </h4>
 
             <small class="text-muted">
-                Data pemasok barang.
+                Kelola data supplier dan pemasok barang inventory.
             </small>
-
         </div>
 
-        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambahSupplier">
-
+        <button class="btn btn-primary px-4 py-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalTambahSupplier">
             <i class="fa-solid fa-plus me-1"></i>
             Tambah Supplier
-
         </button>
 
     </div>
 
     <?= $notif ?>
 
-    <div class="card border-0 shadow-sm">
-
+    <div class="card border-0 supplier-card">
         <div class="card-body">
-
-            <table id="tableSupplier" class="table table-striped table-hover nowrap dt-responsive w-100">
+            <table id="tableSupplier" class="table align-middle table-hover nowrap dt-responsive w-100">
                 <thead class="table-light">
 
                     <tr>
@@ -190,19 +184,38 @@ $result = mysqli_query($koneksi, $query);
                     ?>
 
                     <tr>
-
-                        <td><?= $no++ ?></td>
-
-                        <td><?= $data['nama_supplier'] ?></td>
-
-                        <td><?= $data['telepon'] ?></td>
-
-                        <td><?= $data['alamat'] ?></td>
-
                         <td>
+                            <span class="supplier-number">
 
-                            <div class="btn-group btn-group-sm">
+                                <?= $no++ ?>
 
+                            </span>
+                        </td>
+                        <td>
+                            <div class="fw-semibold text-dark">
+
+                                <?= $data['nama_supplier'] ?>
+
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border">
+
+                                <i class="fa-solid fa-phone me-1 text-success"></i>
+
+                                <?= $data['telepon'] ?>
+
+                            </span>
+                        </td>
+                        <td>
+                            <small class="text-muted">
+
+                                <?= $data['alamat'] ?>
+
+                            </small>
+                        </td>
+                        <td>
+                            <div class="d-flex justify-content-center gap-2">
                                 <button class="btn btn-warning" data-bs-toggle="modal"
                                     data-bs-target="#editSupplier<?= $data['id_supplier'] ?>">
 
@@ -216,20 +229,15 @@ $result = mysqli_query($koneksi, $query);
                                     <i class="fa-solid fa-trash"></i>
 
                                 </a>
-
                             </div>
-
                         </td>
-
                     </tr>
 
                     <?php endwhile; ?>
 
                 </tbody>
             </table>
-
         </div>
-
     </div>
 
 </div>
@@ -408,3 +416,174 @@ $result = mysqli_query($koneksi, $query);
 
     });
 </script>
+
+<style>
+    .supplier-card {
+
+        border-radius: 28px;
+
+        background: rgba(255, 255, 255, .78);
+
+        backdrop-filter: blur(16px);
+
+        box-shadow:
+            0 10px 35px rgba(236, 72, 153, .08);
+
+    }
+
+    .supplier-number {
+
+        width: 35px;
+
+        height: 35px;
+
+        border-radius: 12px;
+
+        background:
+            linear-gradient(135deg,
+                #ec4899,
+                #d946ef);
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        color: white;
+
+        font-weight: 600;
+
+        font-size: 13px;
+
+    }
+
+    .table {
+
+        border-collapse: separate;
+
+        border-spacing: 0 10px;
+
+    }
+
+    .table thead th {
+
+        border: none !important;
+
+        background: transparent !important;
+
+        color: #6b7280;
+
+        font-weight: 600;
+
+        font-size: 14px;
+
+    }
+
+    .table tbody tr {
+
+        background: rgba(255, 255, 255, .8);
+
+        backdrop-filter: blur(12px);
+
+        transition: .3s;
+
+        box-shadow:
+            0 4px 15px rgba(0, 0, 0, .03);
+
+    }
+
+    .table tbody tr:hover {
+
+        transform: translateY(-2px);
+
+    }
+
+    .table tbody td {
+
+        border: none;
+
+        padding: 16px 14px;
+
+        vertical-align: middle;
+
+    }
+
+    .table tbody td:first-child {
+
+        border-radius: 18px 0 0 18px;
+
+    }
+
+    .table tbody td:last-child {
+
+        border-radius: 0 18px 18px 0;
+
+    }
+
+    .modal-content {
+
+        border: none;
+
+        border-radius: 28px;
+
+        overflow: hidden;
+
+        background: rgba(255, 255, 255, .95);
+
+        backdrop-filter: blur(14px);
+
+        box-shadow:
+            0 15px 40px rgba(236, 72, 153, .15);
+
+    }
+
+    .modal-header {
+
+        border-bottom: 1px solid #fce7f3;
+
+    }
+
+    .modal-footer {
+
+        border-top: 1px solid #fce7f3;
+
+    }
+
+    .form-control {
+
+        border-radius: 14px;
+
+        border: 1px solid #f3e8ff;
+
+        padding: 10px 14px;
+
+    }
+
+    .form-control:focus {
+
+        border-color: #ec4899;
+
+        box-shadow:
+            0 0 0 .15rem rgba(236, 72, 153, .15);
+
+    }
+
+    .dataTables_wrapper .dataTables_filter input {
+
+        border-radius: 12px;
+
+        border: 1px solid #f3e8ff;
+
+        padding: 6px 12px;
+
+    }
+
+    .dataTables_wrapper .dataTables_length select {
+
+        border-radius: 12px;
+
+        border: 1px solid #f3e8ff;
+
+    }
+</style>
