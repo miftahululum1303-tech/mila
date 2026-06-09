@@ -20,6 +20,24 @@ if (isset($_POST['update_profil'])) {
     $username = $_POST['username'];
     $email = $_POST['email'];
 
+    $foto_update = '';
+
+    var_dump($_FILES);
+
+    if (!empty($_FILES['foto']['name'])) {
+        $nama_file = time() . '_' . $_FILES['foto']['name'];
+
+        $tmp = $_FILES['foto']['tmp_name'];
+
+        if (!file_exists('assets/uploads/profil')) {
+            mkdir('assets/uploads/profil', 0777, true);
+        }
+
+        move_uploaded_file($tmp, 'assets/uploads/profil/' . $nama_file);
+
+        $foto_update = ", foto = '$nama_file'";
+    }
+
     // Jika password diisi
     if (!empty($_POST['password'])) {
         $password = md5($_POST['password']);
@@ -31,6 +49,7 @@ if (isset($_POST['update_profil'])) {
                 username = '$username',
                 email = '$email',
                 password = '$password'
+                $foto_update
             WHERE id_user = '$id_user'",
         );
     } else {
@@ -40,6 +59,7 @@ if (isset($_POST['update_profil'])) {
                 nama_lengkap = '$nama_lengkap',
                 username = '$username',
                 email = '$email'
+                $foto_update
             WHERE id_user = '$id_user'",
         );
     }
@@ -100,16 +120,16 @@ if (isset($_GET['success'])) {
     </div>
 
     <?= $notif ?>
+    <form method="POST" enctype="multipart/form-data">
+        <div class="row">
 
-    <div class="row">
+            <div class="col-md-8">
 
-        <div class="col-md-8">
+                <div class="card border-0 profil-card">
 
-            <div class="card border-0 profil-card">
+                    <div class="card-body">
 
-                <div class="card-body">
 
-                    <form method="POST">
 
                         <div class="mb-3">
 
@@ -164,8 +184,7 @@ if (isset($_GET['success'])) {
                                 Role
                             </label>
 
-                            <input type="text"
-                                style="background:#fdf2f8; color:#ec4899; font-weight:600;"
+                            <input type="text" style="background:#fdf2f8; color:#ec4899; font-weight:600;"
                                 class="form-control" value="<?= $data['role'] ?>" readonly>
 
                         </div>
@@ -178,92 +197,103 @@ if (isset($_GET['success'])) {
 
                         </button>
 
-                    </form>
+
+                    </div>
 
                 </div>
 
             </div>
 
-        </div>
+            <div class="col-md-4">
 
-        <div class="col-md-4">
+                <div class="card border-0 profil-side-card">
 
-            <div class="card border-0 profil-side-card">
+                    <div class="card-body text-center">
 
-                <div class="card-body text-center">
+                        <div class="mb-3">
 
-                    <div class="mb-3">
+                            <div class="avatar-wrapper mx-auto">
 
-                        <div class="profil-avatar mx-auto">
+                                <?php
+                                $foto = !empty($data['foto']) ? 'assets/uploads/profil/' . $data['foto'] : 'assets/img/default-user.png';
+                                ?>
 
-                            <?= strtoupper(substr($data['nama_lengkap'], 0, 1)) ?>
+                                <img src="<?= $foto ?>" class="profil-foto" id="previewFoto">
+
+                                <label class="avatar-upload">
+
+                                    <i class="fa-solid fa-camera"></i>
+
+                                    <input type="file" id="fotoProfil" name="foto" accept=".jpg,.jpeg,.png"
+                                        hidden>
+
+                                </label>
+
+                            </div>
 
                         </div>
 
+                        <h5 class="fw-bold mb-1">
+                            <?= $data['nama_lengkap'] ?>
+                        </h5>
+
+                        <p class="text-muted mb-2">
+                            <?= $data['role'] ?>
+                        </p>
+
+                        <small class="text-muted">
+                            Bergabung di sistem inventory.
+                        </small>
+                        <hr class="my-4">
+
+                        <div class="text-start">
+
+                            <div class="profil-info-item">
+
+                                <span>
+                                    Username
+                                </span>
+
+                                <strong>
+                                    <?= $data['username'] ?>
+                                </strong>
+
+                            </div>
+
+                            <div class="profil-info-item">
+
+                                <span>
+                                    Email
+                                </span>
+
+                                <strong>
+                                    <?= $data['email'] ?>
+                                </strong>
+
+                            </div>
+
+                            <div class="profil-info-item border-0">
+
+                                <span>
+                                    Role
+                                </span>
+
+                                <strong>
+
+                                    <?= $data['role'] ?>
+
+                                </strong>
+
+                            </div>
+
+                        </div>
                     </div>
 
-                    <h5 class="fw-bold mb-1">
-                        <?= $data['nama_lengkap'] ?>
-                    </h5>
-
-                    <p class="text-muted mb-2">
-                        <?= $data['role'] ?>
-                    </p>
-
-                    <small class="text-muted">
-                        Bergabung di sistem inventory.
-                    </small>
-                    <hr class="my-4">
-
-                    <div class="text-start">
-
-                        <div class="profil-info-item">
-
-                            <span>
-                                Username
-                            </span>
-
-                            <strong>
-                                <?= $data['username'] ?>
-                            </strong>
-
-                        </div>
-
-                        <div class="profil-info-item">
-
-                            <span>
-                                Email
-                            </span>
-
-                            <strong>
-                                <?= $data['email'] ?>
-                            </strong>
-
-                        </div>
-
-                        <div class="profil-info-item border-0">
-
-                            <span>
-                                Role
-                            </span>
-
-                            <strong>
-
-                                <?= $data['role'] ?>
-
-                            </strong>
-
-                        </div>
-
-                    </div>
                 </div>
 
             </div>
-
         </div>
-
-    </div>
-
+    </form>
 </div>
 
 <style>
@@ -323,6 +353,82 @@ if (isset($_GET['success'])) {
 
         box-shadow:
             0 15px 35px rgba(236, 72, 153, .2);
+
+    }
+
+    .profil-foto {
+
+        width: 110px;
+
+        height: 110px;
+
+        object-fit: cover;
+
+        border-radius: 30px;
+
+        border: 4px solid white;
+
+        box-shadow:
+            0 15px 35px rgba(236, 72, 153, .15);
+
+    }
+
+    .avatar-wrapper {
+
+        position: relative;
+
+        width: 110px;
+
+        height: 110px;
+
+    }
+
+    .avatar-upload {
+
+        position: absolute;
+
+        bottom: -5px;
+
+        right: -5px;
+
+        width: 36px;
+
+        height: 36px;
+
+        border-radius: 50%;
+
+        background: linear-gradient(135deg,
+                #ec4899,
+                #d946ef);
+
+        color: white;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        cursor: pointer;
+
+        border: 3px solid white;
+
+        box-shadow:
+            0 6px 15px rgba(236, 72, 153, .25);
+
+        transition: .25s;
+
+    }
+
+    .avatar-upload:hover {
+
+        transform: scale(1.08);
+
+    }
+
+    .avatar-upload i {
+
+        font-size: 14px;
 
     }
 

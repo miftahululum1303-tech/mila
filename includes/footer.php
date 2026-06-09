@@ -195,6 +195,37 @@
     }, 3000);
 </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const fotoInput = document.getElementById('fotoProfil');
+        const preview = document.getElementById('previewFoto');
+
+        if (fotoInput) {
+
+            fotoInput.addEventListener('change', function() {
+
+                const file = this.files[0];
+
+                if (!file) return;
+
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+
+                    preview.src = e.target.result;
+
+                };
+
+                reader.readAsDataURL(file);
+
+            });
+
+        }
+
+    });
+</script>
+
 </body>
 
 </html>
