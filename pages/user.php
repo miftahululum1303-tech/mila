@@ -179,12 +179,12 @@ $result = mysqli_query($koneksi, $query);
             <table id="tableUser" class="table align-middle table-hover nowrap dt-responsive w-100 user-table">
                 <thead class="table-light">
 
-                    <tr>
-                        <th width="5%">No</th>
-                        <th>Nama</th>
-                        <th>Level</th>
-                        <th width="15%">Aksi</th>
-                    </tr>
+                    <th>Foto</th>
+                    <th>Nama Lengkap</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Aksi</th>
 
                 </thead>
 
@@ -200,67 +200,29 @@ $result = mysqli_query($koneksi, $query);
 
                     <tr>
                         <td>
-                            <span class="user-number">
+                            <?php if (!empty($data['foto']) && file_exists('assets/uploads/profil/' . $data['foto'])) : ?>
 
-                                <?= $no++ ?>
-
-                            </span>
-                        </td>
-
-                        <td>
-
-                            <div class="d-flex align-items-center">
-
-                                <div class="user-avatar">
-
-                                    <?= strtoupper(substr($data['nama_lengkap'], 0, 1)) ?>
-
-                                </div>
-
-                                <div class="ms-3">
-
-                                    <div class="fw-semibold text-dark">
-
-                                        <?= $data['nama_lengkap'] ?>
-
-                                    </div>
-
-                                    <small class="text-muted">
-
-                                        <?= $data['username'] ?>
-
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-                        <td>
-
-                            <?php if ($data['role'] == 'Admin') : ?>
-
-                            <span class="badge-role-admin">
-
-                                <i class="fa-solid fa-crown me-1"></i>
-
-                                Admin
-
-                            </span>
+                            <img src="assets/uploads/profil/<?= $data['foto'] ?>" class="user-avatar">
 
                             <?php else : ?>
 
-                            <span class="badge-role-user">
-
-                                <i class="fa-solid fa-user me-1"></i>
-
-                                Petugas
-
-                            </span>
+                            <div class="user-avatar-placeholder">
+                                <?= strtoupper(substr($data['nama_lengkap'], 0, 1)) ?>
+                            </div>
 
                             <?php endif; ?>
+                        </td>
 
+                        <td><?= $data['nama_lengkap'] ?></td>
+                        <td><?= $data['username'] ?></td>
+                        <td><?= $data['email'] ?></td>
+
+                        <td>
+                            <?php if ($data['role'] == 'Admin') : ?>
+                            <span class="badge bg-danger">Admin</span>
+                            <?php else : ?>
+                            <span class="badge bg-primary">Petugas</span>
+                            <?php endif; ?>
                         </td>
 
                         <td>
@@ -747,5 +709,32 @@ $result = mysqli_query($koneksi, $query);
 
         border: 1px solid #f3e8ff;
 
+    }
+
+    .user-avatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 14px;
+        object-fit: cover;
+        border: 2px solid #fff;
+        box-shadow: 0 4px 12px rgba(236, 72, 153, .15);
+    }
+
+    .user-avatar-placeholder {
+        width: 45px;
+        height: 45px;
+        border-radius: 14px;
+        background: linear-gradient(135deg,
+                #ec4899,
+                #d946ef);
+
+        color: white;
+        font-weight: 700;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        box-shadow: 0 4px 12px rgba(236, 72, 153, .15);
     }
 </style>

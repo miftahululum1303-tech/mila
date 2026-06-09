@@ -176,27 +176,31 @@
     <!-- BOTTOM PROFILE -->
     <div class="mt-auto p-3 menu-text">
 
-        <div class="card border-0 rounded-4"
-            style="
-                background:linear-gradient(135deg,#fdf2f8,#faf5ff);
-            ">
+        <?php
+        $querySidebar = mysqli_query($koneksi, "SELECT foto FROM users WHERE id_user='" . $_SESSION['id_user'] . "'");
+
+        $userSidebar = mysqli_fetch_assoc($querySidebar);
+        ?>
+
+        <div class="card border-0 rounded-4" style="background:linear-gradient(135deg,#fdf2f8,#faf5ff);">
 
             <div class="card-body p-3">
 
                 <div class="d-flex align-items-center">
 
-                    <div class="rounded-circle d-flex align-items-center justify-content-center"
-                        style="
-                            width:45px;
-                            height:45px;
-                            background:linear-gradient(135deg,#ec4899,#d946ef);
-                            color:white;
-                            font-weight:600;
-                        ">
+                    <?php if (!empty($userSidebar['foto'])) : ?>
+
+                    <img src="assets/uploads/profil/<?= $userSidebar['foto'] ?>" class="sidebar-profile-img">
+
+                    <?php else : ?>
+
+                    <div class="sidebar-avatar">
 
                         <?= strtoupper(substr($_SESSION['nama_lengkap'], 0, 1)) ?>
 
                     </div>
+
+                    <?php endif; ?>
 
                     <div class="ms-3">
 
@@ -225,3 +229,50 @@
 </aside>
 
 <main class="main-content">
+
+    <style>
+        .sidebar-profile-img {
+
+            width: 45px;
+
+            height: 45px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            border: 2px solid #fbcfe8;
+
+            box-shadow:
+                0 4px 12px rgba(236, 72, 153, .15);
+
+        }
+
+        .sidebar-avatar {
+
+            width: 45px;
+
+            height: 45px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                linear-gradient(135deg, #ec4899, #d946ef);
+
+            color: white;
+
+            font-weight: 600;
+
+            font-size: 16px;
+
+            box-shadow:
+                0 4px 12px rgba(236, 72, 153, .15);
+
+        }
+    </style>

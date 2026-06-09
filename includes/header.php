@@ -1,3 +1,21 @@
+<?php
+
+$userLogin = null;
+
+if (isset($_SESSION['id_user'])) {
+    $idUser = $_SESSION['id_user'];
+
+    $qUser = mysqli_query(
+        $koneksi,
+        "SELECT foto,nama_lengkap
+         FROM users
+         WHERE id_user='$idUser'",
+    );
+
+    $userLogin = mysqli_fetch_assoc($qUser);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -373,6 +391,34 @@
 
         }
 
+        .profile-avatar-navbar {
+
+            width: 38px;
+
+            height: 38px;
+
+            border-radius: 50%;
+
+            background: linear-gradient(135deg,
+                    #ec4899,
+                    #d946ef);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: white;
+
+            font-weight: 600;
+
+            font-size: 14px;
+
+            margin-right: 8px;
+
+        }
+
         /* ========================================= */
         /* FOOTER */
         /* ========================================= */
@@ -467,10 +513,24 @@
             <div class="dropdown">
                 <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
                     id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
-                    <div class="profile-img d-flex align-items-center justify-content-center bg-light">
-                        <i class="fa-solid fa-user text-secondary"></i>
+                    <?php if (!empty($userLogin['foto'])) : ?>
+
+                    <img src="assets/uploads/profil/<?= $userLogin['foto'] ?>" class="profile-img">
+
+                    <?php else : ?>
+
+                    <div class="profile-avatar-navbar">
+
+                        <?= strtoupper(substr($userLogin['nama_lengkap'], 0, 1)) ?>
+
                     </div>
-                    <span class="d-none d-sm-inline text-dark fw-semibold small"><?= $_SESSION['nama_lengkap'] ?></span>
+
+                    <?php endif; ?>
+                    <span class="d-none d-sm-inline text-dark fw-semibold small">
+
+                        <?= $userLogin['nama_lengkap'] ?>
+
+                    </span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm mt-2" aria-labelledby="userMenu">
                     <li><a class="dropdown-menu-item dropdown-item py-2" href="index.php?page=profil"><i
